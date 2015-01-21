@@ -1,0 +1,26 @@
+{
+  "name": "if-async",
+  "version": "0.0.1",
+  "keywords": [
+    "async"
+  ],
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "dependencies": {},
+  "author": "Yaniv Kessler",
+  "bugs": {
+    "url": "https://github.com/kessler/if-async/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kessler/if-async"
+  },
+  "homepage": "https://github.com/kessler/if-async",
+  "license": "MIT",
+  "devDependencies": {
+    "should": "^4.6.1"
+  }
+}
