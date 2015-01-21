@@ -9,7 +9,7 @@ async.series([
     foo,
     ifAsync(predicateFoo, trueFoo, falseFoo),
     // this also
-    ifAsync(predicateFoo).then(trueFoo).else(falseFoo)
+    ifAsync(predicateFoo).then(trueFoo).else(falseFoo),
     bar
 ])
 
