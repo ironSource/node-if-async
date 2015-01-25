@@ -151,6 +151,177 @@ describe('ifAsync', function() {
 		}).should.throw('only then() may be called after elseIf()')
 	})
 
+	describe('has an and() operator', function () {
+		it('ifAsync(true).and(false) should invoke both predicates and the else consequent', function (done) {
+			var p1Invoked = false
+			var p2Invoked = false
+			var c1Invoked = false
+			var c2Invoked = false
+
+			ifAsync(function(callback) {
+				p1Invoked = true
+				callback(null, true)
+			})
+			.and(function (callback) {
+				p2Invoked = true
+				callback(null, false)
+			}).then(function(cb) {
+				c1Invoked = true
+				cb()
+			}).else(function (cb) {
+				c2Invoked = true
+				cb()
+			})(function (err) {
+				p1Invoked.should.be.true
+				p2Invoked.should.be.true
+				c1Invoked.should.be.false
+				c2Invoked.should.be.true
+				done()
+			})	
+		})
+		
+		it('ifAsync(false).and(*) should invoke the first predicate and the second (else) consequent, it should not invoke the second predicate', function(done) {
+			var p1Invoked = false
+			var p2Invoked = false
+			var c1Invoked = false
+			var c2Invoked = false
+
+			ifAsync(function(callback) {
+				p1Invoked = true
+				callback(null, false)
+			})
+			.and(function (callback) {
+				p2Invoked = true
+				callback(null, true)
+			}).then(function(cb) {
+				c1Invoked = true
+				cb()
+			}).else(function (cb) {
+				c2Invoked = true
+				cb()
+			})(function (err) {
+				p1Invoked.should.be.true
+				p2Invoked.should.be.false
+				c1Invoked.should.be.false
+				c2Invoked.should.be.true
+				done()
+			})
+		})
+
+		it('ifAsync(true).and(true) should invoke both predicates and the first (then) consequent', function(done) {
+			var p1Invoked = false
+			var p2Invoked = false
+			var c1Invoked = false
+			var c2Invoked = false
+
+			ifAsync(function(callback) {
+				p1Invoked = true
+				callback(null, true)
+			})
+			.and(function (callback) {
+				p2Invoked = true
+				callback(null, true)
+			}).then(function(cb) {
+				c1Invoked = true
+				cb()
+			}).else(function (cb) {
+				c2Invoked = true
+				cb()
+			})(function (err) {
+				p1Invoked.should.be.true
+				p2Invoked.should.be.true
+				c1Invoked.should.be.true
+				c2Invoked.should.be.false
+				done()
+			})
+		})
+	})
+
+	describe('has an or() operator', function () {
+		it('ifAsync(true).or(*) should invoke the first predicate and the first (then) consequent, it should not invoke the second predicate', function (done) {
+			var p1Invoked = false
+			var p2Invoked = false
+			var c1Invoked = false
+			var c2Invoked = false
+
+			ifAsync(function(callback) {
+				p1Invoked = true
+				callback(null, true)
+			})
+			.or(function (callback) {
+				p2Invoked = true
+				callback(null, true)
+			}).then(function(cb) {
+				c1Invoked = true
+				cb()
+			}).else(function (cb) {
+				c2Invoked = true
+				cb()
+			})(function (err) {
+				p1Invoked.should.be.true
+				p2Invoked.should.be.false
+				c1Invoked.should.be.true
+				c2Invoked.should.be.false
+				done()
+			})
+		})
+
+		it('ifAsync(false).or(true) should invoke both predicates and the first (then) consequent', function (done) {
+			var p1Invoked = false
+			var p2Invoked = false
+			var c1Invoked = false
+			var c2Invoked = false
+
+			ifAsync(function(callback) {
+				p1Invoked = true
+				callback(null, false)
+			})
+			.or(function (callback) {
+				p2Invoked = true
+				callback(null, true)
+			}).then(function(cb) {
+				c1Invoked = true
+				cb()
+			}).else(function (cb) {
+				c2Invoked = true
+				cb()
+			})(function (err) {
+				p1Invoked.should.be.true
+				p2Invoked.should.be.true
+				c1Invoked.should.be.true
+				c2Invoked.should.be.false
+				done()
+			})
+		})
+
+		it('ifAsync(false).or(false) should invoke both predicates and the second (else) consequent', function (done) {
+			var p1Invoked = false
+			var p2Invoked = false
+			var c1Invoked = false
+			var c2Invoked = false
+
+			ifAsync(function(callback) {
+				p1Invoked = true
+				callback(null, false)
+			})
+			.or(function (callback) {
+				p2Invoked = true
+				callback(null, false)
+			}).then(function(cb) {
+				c1Invoked = true
+				cb()
+			}).else(function (cb) {
+				c2Invoked = true
+				cb()
+			})(function (err) {
+				p1Invoked.should.be.true
+				p2Invoked.should.be.true
+				c1Invoked.should.be.false
+				c2Invoked.should.be.true
+				done()
+			})
+		})
+	})
 
 	function pTrue (callback) {
 		callback(null, true)

@@ -1,10 +1,10 @@
 {
   "name": "if-async",
+  "description": "",
   "version": "2.0.0",
   "keywords": [
     "async"
   ],
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha -R spec"
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/kessler/if-async",
   "license": "MIT",
   "devDependencies": {
+    "mocha": "^2.1.0",
     "should": "^4.6.1"
   }
 }
