@@ -2,7 +2,7 @@
 
 async conditional execution for async.js or standalone usage
 
-## Example 1: Using with Async.js
+## Example 1: Using with Async.js Series
 
 ```javascript
 var async = require('async')
@@ -14,7 +14,7 @@ async.series([
         .elseIf(predicate3).then(consequent3)
         .else(else1),
     bar
-])
+], function(err) {})
 
 function foo(callback) { ... }
 function predicate1(callback) { fs.stat(... callback ...) }
@@ -26,7 +26,43 @@ function else1(callback) { ... }
 function bar(callback) { ... }
 ```
 
-## Example 2: Standalone usage
+## Example 2: Using with Async.js waterfall
+```javascript
+var async = require('async')
+var ifAsync = require('if-async')
+
+async.waterfall([
+    foo,
+    ifAsync(p1).then(c1).else(c2),
+    bar
+], function(err) {})
+
+function foo(callback) {
+    callback(null, 1)
+}
+
+function p1(a, callback) {
+    console.log(a) // prints 1
+    callback(null, true) // this will cause c1 to be executed rather than c2
+}
+
+function c1(a, callback) {
+    console.log(a) // prints 1
+    callback(null, 2)
+}
+
+function c2(a, callback) {
+    console.log(a) // prints 1
+    callback(null, 3)
+}
+
+function bar(a, callback) {
+    console.log(a) // prints 2 because the c1 passed 2 in the callback
+    callback()
+}
+```
+
+## Example 3: Standalone usage
 
 ```javascript
 var ifAsync = require('if-async')

@@ -7,7 +7,7 @@ var EXPECT_THEN = 1
 
 function ifAsync() {
 
-	var clauses = Array.prototype.slice.call(arguments, 0)	
+	var clauses = toArray(arguments)
 	var elseClause = elseNoop
 	var fluentState = OK
 
@@ -22,28 +22,41 @@ function ifAsync() {
 		elseClause = clauses.pop()
 	}
 
-	var functor = function(callback) {
+	var functor = function() {
 		if (fluentState !== OK) {
 			throw new Error('missing at least one consequent, you forgot to call then() ?')
+		}
+
+		var args = arguments
+		var callback = args[args.length - 1]
+
+		if (typeof callback !== 'function') {
+			throw new Error('missing callback argument')
 		}
 
 		var predicate = clauses.shift()
 		
 		if (!predicate) {
-			return elseClause(callback)
+			return elseClause.apply(null, args)
 		}
 
 		var consequent = clauses.shift()
 		
-		predicate(function(err, result) {
+		var replacedCallbackArgs = toArray(args)
+		replacedCallbackArgs.pop()
+		replacedCallbackArgs.push(predicateCallback)
+
+		predicate.apply(null, replacedCallbackArgs)
+
+		function predicateCallback(err, result) {
 			if (err) return callback(err)
 
 			if (result) {
-				return consequent(callback)
+				return consequent.apply(null, args)
 			} else {
-				functor(callback)
+				functor.apply(null, args)
 			}
-		})
+		}
 	}
 
 	functor.then = function(fn) {
@@ -115,4 +128,8 @@ function elseTrue(callback) {
 
 function elseFalse(callback) {
 	callback(null, false)
+}
+
+function toArray(args) {
+	return Array.prototype.slice.call(args, 0)
 }

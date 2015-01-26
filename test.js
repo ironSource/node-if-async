@@ -323,6 +323,22 @@ describe('ifAsync', function() {
 		})
 	})
 
+	it('carry arguments', function (done) {
+		ifAsync(function(a, b, callback) {
+			a.should.eql(1)
+			b.should.eql(2)
+			callback(null, true)
+		})
+		.then(function(a, b, callback) {
+			a.should.eql(1)
+			b.should.eql(2)
+			callback(null, 3)
+		})(1, 2, function (err, a) {
+			a.should.eql(3)
+			done()
+		})
+	})
+
 	function pTrue (callback) {
 		callback(null, true)
 	}
