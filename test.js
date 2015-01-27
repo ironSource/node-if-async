@@ -235,6 +235,38 @@ describe('ifAsync', function() {
 				done()
 			})
 		})
+
+		it('ifAsync(p1 = false).then(c1).elseif(p2 = true).and(p3 = true).then(c2) should not invoke c1 and should invoke p1, p2 and p3', function(done) {
+			var c1Invoked = false
+			var c2Invoked = false
+			var p1Invoked = false
+			var p2Invoked = false
+			var p3Invoked = false
+
+			ifAsync(function p1(callback) {
+				p1Invoked = true
+				callback(null, false)
+			}).then(function c1(callback) {				
+				c1Invoked = true
+				callback()
+			}).elseif(function p2(callback) {
+				p2Invoked = true
+				callback(null, true)
+			}).and(function p3(callback) {
+				p3Invoked = true
+				callback(null, true)
+			}).then(function c2(callback) {
+				c2Invoked = true
+				callback()
+			})(function(err) {
+				p1Invoked.should.be.true
+				c1Invoked.should.be.false
+				p2Invoked.should.be.true
+				p3Invoked.should.be.true
+				c2Invoked.should.be.true
+				done()
+			})
+		})
 	})
 
 	describe('has an or() operator', function () {
@@ -317,6 +349,38 @@ describe('ifAsync', function() {
 				p1Invoked.should.be.true
 				p2Invoked.should.be.true
 				c1Invoked.should.be.false
+				c2Invoked.should.be.true
+				done()
+			})
+		})
+
+		it('ifAsync(p1 = false).then(c1).elseif(p2 = false).or(p3 = true).then(c2) should not invoke c1 and should invoke p1, p2 and p3', function(done) {
+			var c1Invoked = false
+			var c2Invoked = false
+			var p1Invoked = false
+			var p2Invoked = false
+			var p3Invoked = false
+
+			ifAsync(function p1(callback) {
+				p1Invoked = true
+				callback(null, false)
+			}).then(function c1(callback) {				
+				c1Invoked = true
+				callback()
+			}).elseif(function p2(callback) {
+				p2Invoked = true
+				callback(null, false)
+			}).or(function p3(callback) {
+				p3Invoked = true
+				callback(null, true)
+			}).then(function c2(callback) {
+				c2Invoked = true
+				callback()
+			})(function(err) {
+				p1Invoked.should.be.true
+				c1Invoked.should.be.false
+				p2Invoked.should.be.true
+				p3Invoked.should.be.true
 				c2Invoked.should.be.true
 				done()
 			})

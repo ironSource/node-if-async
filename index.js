@@ -70,7 +70,7 @@ function ifAsync() {
 	}
 
 	functor.and = function(fn) {
-		var predicate = clauses.shift()
+		var predicate = clauses.pop()
 		// logical AND using ifAsync
 		clauses.push(			
 			ifAsync(predicate)
@@ -82,7 +82,7 @@ function ifAsync() {
 	}
 
 	functor.or = function(fn) {
-		var predicate = clauses.shift()
+		var predicate = clauses.pop()
 		// logical OR
 		clauses.push(
 			ifAsync(predicate)
