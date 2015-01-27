@@ -403,6 +403,55 @@ describe('ifAsync', function() {
 		})
 	})
 
+	it('has a negation operator for predicates', function (done) {
+		var p1Invoked = false
+		var c1Invoked = false
+		var c2Invoked = false
+
+		ifAsync.not(function p1(callback) {
+			p1Invoked = true
+			callback(null, true)
+		}).then(function c1(callback) {
+			c1Invoked = true
+			callback()
+		}).else(function c2(callback) {
+			c2Invoked = true
+			callback()
+		})(function(err) {
+			p1Invoked.should.be.true
+			c1Invoked.should.be.false
+			c2Invoked.should.be.true
+			done()
+		})
+	})
+
+	it('has a negation operator for predicates 2', function (done) {
+		var p1Invoked = false
+		var p2Invoked = false
+		var c1Invoked = false
+		var c2Invoked = false
+
+		ifAsync(function p1(callback) {
+			p1Invoked = true
+			callback(null, false)
+		}).then(function c1(callback) {
+			c1Invoked = true
+			callback()
+		}).elseIf.not(function p2(callback) {
+			p2Invoked = true
+			callback(null, false)
+		}).then(function c2(callback) {
+			c2Invoked = true
+			callback()
+		})(function(err) {
+			p1Invoked.should.be.true
+			c1Invoked.should.be.false
+			p2Invoked.should.be.true
+			c2Invoked.should.be.true
+			done()
+		})
+	})
+
 	function pTrue (callback) {
 		callback(null, true)
 	}

@@ -117,6 +117,8 @@ When calling with a single function, it is considered a predicate and the user i
 
 Both array style calls and fluent interface can be mixed. e.g ```ifAsync(f1,f2).elseIf(f3).then(f4)``` which is equivalent to ```ifAsync(f1).then(f2).elseIf(f3).then(f4)```
 
+#### ifAsync.not(Function)
+Same as ifAsync, only this call only accepts a predicate function and will negate its result
 
 #### .then(Function) 
 ```javascript
@@ -142,6 +144,9 @@ ifAsync(Function f1).then(Function f2).elseIf(Function f3).then(Function f4)
 ```
 evaluate the first predicate (f1) if it evalutes to true then run consequent f2 otherwise evaluate f3 and if that is true, run consequent f4
 elseIf() is case insensitive, you can also use elseif() 
+
+#### .elseIf.not(Function)
+same as elseIf only negate the result of the predicate
 
 #### .else(Function)
 ```javascript

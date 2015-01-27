@@ -43,6 +43,7 @@ function ifAsync() {
 		var consequent = clauses.shift()
 		
 		var replacedCallbackArgs = toArray(args)
+
 		replacedCallbackArgs.pop()
 		replacedCallbackArgs.push(predicateCallback)
 
@@ -94,28 +95,57 @@ function ifAsync() {
 		return functor
 	}
 
-	functor.else = function(fn) {
+	functor.else = function(predicate) {
 		if (fluentState === EXPECT_THEN) {
 			throw new Error('only then() may be called after elseIf()')
 		}
 
-		elseClause = fn
+		elseClause = predicate
 		return functor
 	}
 
-	functor.elseif = functor.elseIf = function(fn) {
+	functor.elseif = functor.elseIf = function(predicate) {
 		if (fluentState === EXPECT_THEN) {
 			throw new Error('only then() may be called after elseIf()')
 		}
 
-		clauses.push(fn)
+		clauses.push(predicate)
 
 		// allow only then after a call to elseif
 		fluentState = EXPECT_THEN
 		return functor
 	}
 
+	functor.elseif.not = function(predicate) {
+		return functor.elseIf(not(predicate))
+	}
+
 	return functor	
+}
+
+ifAsync.not = function(predicate) {
+	if (typeof predicate !== 'function') {
+		throw new Error('argument must be a predicate function')
+	}
+
+	return ifAsync(not(predicate))
+}
+
+function not(predicate) {
+	return function () {
+		var args = toArray(arguments)
+		var callback = args.pop()
+
+		if (typeof callback !== 'function') {
+			throw new Error('expected a callback but instead got ' + typeof callback)
+		}
+
+		args.push(function(err, result) {
+			callback(err, !result)
+		})
+
+		predicate.apply(null, args)
+	}
 }
 
 function elseNoop(callback) {
