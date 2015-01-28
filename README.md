@@ -93,7 +93,7 @@ function predicate(callback) {
 ```
 
 #### Consequent
-in the context of ifAsync and consequent is an async function that is invoked as a result of an evaluation of a predicate, e.g
+in the context of ifAsync a consequent is an async function that is invoked as a result of an evaluation of a predicate, e.g
 ```javascript
 function consequent(callback) {
     callback(null, 'dont care')    
