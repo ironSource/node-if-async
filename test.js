@@ -267,6 +267,33 @@ describe('ifAsync', function() {
 				done()
 			})
 		})
+
+		it('ifAsync(p1 = true).and.not(p2 = false).then(c1), should invoke p1 and p2 and c1 and not c2', function (done) {
+			var c1Invoked = false
+			var c2Invoked = false
+			var p1Invoked = false
+			var p2Invoked = false
+			
+			ifAsync(function p1(callback) {
+				p1Invoked = true
+				callback(null, true)
+			}).and.not(function p2(callback) {
+				p2Invoked = true
+				callback(null, false)
+			}).then(function c1(callback) {				
+				c1Invoked = true
+				callback()
+			}).else(function c2 (callback) {
+				c2Invoked = true
+				callback()
+			})(function(err) {
+				p1Invoked.should.be.true				
+				p2Invoked.should.be.true
+				c1Invoked.should.be.true
+				c2Invoked.should.be.false
+				done()
+			})	
+		})
 	})
 
 	describe('has an or() operator', function () {
@@ -384,6 +411,34 @@ describe('ifAsync', function() {
 				c2Invoked.should.be.true
 				done()
 			})
+		})
+
+
+		it('ifAsync(p1 = false).or.not(p2 = false).then(c1), should invoke p1 and p2 and c1 and not c2', function (done) {
+			var c1Invoked = false
+			var c2Invoked = false
+			var p1Invoked = false
+			var p2Invoked = false
+			
+			ifAsync(function p1(callback) {
+				p1Invoked = true
+				callback(null, false)
+			}).or.not(function p2(callback) {
+				p2Invoked = true
+				callback(null, false)
+			}).then(function c1(callback) {				
+				c1Invoked = true
+				callback()
+			}).else(function c2 (callback) {
+				c2Invoked = true
+				callback()
+			})(function(err) {
+				p1Invoked.should.be.true				
+				p2Invoked.should.be.true
+				c1Invoked.should.be.true
+				c2Invoked.should.be.false
+				done()
+			})	
 		})
 	})
 

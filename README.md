@@ -132,11 +132,17 @@ ifAsync(Function f1).and(Function f2).then(Function f3)
 ```
 connect predicates f1 and f2 with a logical AND operator
 
+#### .and.not(Function)
+same as and() only negate the result of the predicate
+
 #### .or(Function)
 ```javascript
  ifAsync(Function f1).or(Function f2).then(Function f3)
 ```
 connect predicates f1 and f2 with a logical OR operator
+
+#### .or.not(Function)
+same as or() only negate the result of the predicate
 
 #### .elseIf(Function)
 ```javascript
@@ -146,7 +152,7 @@ evaluate the first predicate (f1) if it evalutes to true then run consequent f2 
 elseIf() is case insensitive, you can also use elseif() 
 
 #### .elseIf.not(Function)
-same as elseIf only negate the result of the predicate
+same as elseIf() only negate the result of the predicate
 
 #### .else(Function)
 ```javascript

@@ -82,6 +82,10 @@ function ifAsync() {
 		return functor
 	}
 
+	functor.and.not = function(predicate) {
+		return functor.and(not(predicate))
+	}
+
 	functor.or = function(fn) {
 		var predicate = clauses.pop()
 		// logical OR
@@ -93,6 +97,10 @@ function ifAsync() {
 				.else(elseFalse)
 		)
 		return functor
+	}
+
+	functor.or.not = function(predicate) {
+		return functor.or(not(predicate))
 	}
 
 	functor.else = function(predicate) {
