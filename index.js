@@ -156,15 +156,30 @@ function not(predicate) {
 	}
 }
 
-function elseNoop(callback) {
+function elseNoop() {
+	var callback = arguments[arguments.length - 1]
+	if (typeof callback !== 'function') {
+		throw new Error('expected a callback function')
+	}
+
 	setImmediate(callback)
 }
 
-function elseTrue(callback) {
+function elseTrue() {
+	var callback = arguments[arguments.length - 1]
+	if (typeof callback !== 'function') {
+		throw new Error('expected a callback function')
+	}
+	
 	callback(null, true)
 }
 
-function elseFalse(callback) {
+function elseFalse() {
+	var callback = arguments[arguments.length - 1]
+	if (typeof callback !== 'function') {
+		throw new Error('expected a callback function')
+	}
+	
 	callback(null, false)
 }
 
