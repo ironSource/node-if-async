@@ -442,7 +442,7 @@ describe('ifAsync', function() {
 		})
 	})
 
-	it('carry arguments', function (done) {
+	it('carry arguments from "then" consequent', function (done) {
 		ifAsync(function(a, b, callback) {
 			a.should.eql(1)
 			b.should.eql(2)
@@ -454,6 +454,23 @@ describe('ifAsync', function() {
 			callback(null, 3)
 		})(1, 2, function (err, a) {
 			a.should.eql(3)
+			done()
+		})
+	})
+
+	it('carry arguments from default "else" consequent', function (done) {
+		ifAsync(function(a, b, callback) {
+			a.should.eql(1)
+			b.should.eql(2)
+			callback(null, false)
+		})
+		.then(function(a, b, callback) {
+			a.should.eql(1)
+			b.should.eql(2)
+			callback(null, 3)
+		})(1, 2, function (err, a, b) {
+			a.should.eql(1)
+			b.should.eql(2)
 			done()
 		})
 	})

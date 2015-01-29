@@ -76,7 +76,7 @@ function ifAsync() {
 		clauses.push(			
 			ifAsync(predicate)
 				.then(fn)
-				.else(elseFalse)
+				.else(callbackFalse)
 		)
 
 		return functor
@@ -91,10 +91,10 @@ function ifAsync() {
 		// logical OR
 		clauses.push(
 			ifAsync(predicate)
-				.then(elseTrue)
+				.then(callbackTrue)
 				.elseIf(fn)
-				.then(elseTrue)
-				.else(elseFalse)
+				.then(callbackTrue)
+				.else(callbackFalse)
 		)
 		return functor
 	}
@@ -157,15 +157,20 @@ function not(predicate) {
 }
 
 function elseNoop() {
-	var callback = arguments[arguments.length - 1]
+	var args = toArray(arguments)
+	var callback = args.pop()	
+	args.unshift(null)
+
 	if (typeof callback !== 'function') {
 		throw new Error('expected a callback function')
 	}
 
-	setImmediate(callback)
+	setImmediate(function () {		
+		callback.apply(null, args)
+	})
 }
 
-function elseTrue() {
+function callbackTrue() {
 	var callback = arguments[arguments.length - 1]
 	if (typeof callback !== 'function') {
 		throw new Error('expected a callback function')
@@ -174,7 +179,7 @@ function elseTrue() {
 	callback(null, true)
 }
 
-function elseFalse() {
+function callbackFalse() {
 	var callback = arguments[arguments.length - 1]
 	if (typeof callback !== 'function') {
 		throw new Error('expected a callback function')
