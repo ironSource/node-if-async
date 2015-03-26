@@ -1,4 +1,4 @@
-# if-async [![Build Status](https://secure.travis-ci.org/kessler/if-async.png?branch=master)](http://travis-ci.org/kessler/if-async)
+# if-async [![Build Status](https://secure.travis-ci.org/ironsource/node-if-async.png?branch=master)](http://travis-ci.org/ironsource/node-if-async)
 
 async conditional execution for async.js or standalone usage
 
